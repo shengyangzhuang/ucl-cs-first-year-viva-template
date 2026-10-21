@@ -1,0 +1,358 @@
+\documentclass{ucl-rebl}
+% Add the class option `confidential` only if the report should be marked confidential.
+
+% --- Preamble rules for word-count tools ---
+%TC:break main
+%TC:envir itemize [] 1
+%TC:envir enumerate [] 1
+%TC:macro \caption [text]
+
+% Numeric citations; change the citation style if your supervisors require another format.
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{unsrtnat}
+\usepackage{pdfpages}
+
+% Typography
+\RequirePackage{tgpagella}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{newtxmath}
+\RequirePackage{microtype}
+\apptocmd{\thebibliography}
+  {\emergencystretch=3em\hbadness=1100\hfuzz=1pt\relax}
+  {}{}
+
+% Report layout
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+\renewcommand{\listfigurename}{List of Figures}
+\renewcommand{\listtablename}{List of Tables}
+\titleformat{\section}[hang]
+  {\normalfont\Large\bfseries}
+  {\thesection}{0.6em}{#1}
+\titleformat{\subsection}[hang]
+  {\normalfont\large\bfseries}
+  {\thesubsection}{0.6em}{#1}
+
+% -------------------------------------------------
+% Report metadata: replace every bracketed value.
+% -------------------------------------------------
+\newcommand{\projecttitle}{[Research project title]}
+\newcommand{\reporttitle}{First-Year PhD Viva Report}
+\newcommand{\reportauthor}{[Candidate full name]}
+\newcommand{\studentnumber}{[Student number]}
+\newcommand{\degreeprogramme}{MPhil/PhD in Computer Science}
+\newcommand{\department}{Department of Computer Science}
+\newcommand{\institution}{University College London}
+\newcommand{\supervisors}{[Supervisor name(s)]}
+\newcommand{\reportdate}{[Submission date]}
+
+% Drafting prompts are visible in the compiled PDF; remove them before submission.
+\newcommand{\reportprompt}[1]{%
+  \par\noindent{\color{gray}\itshape [#1]}\par
+}
+\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+
+% Chapter-style openings built on the article-based report class.
+\newif\ifreportappendix
+\reportappendixfalse
+\newcommand{\reportchapter}[2]{%
+  \clearpage
+  \refstepcounter{section}%
+  \label{#2}%
+  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}%
+  \ifreportappendix
+    \section*{Appendix~\thesection: #1}%
+  \else
+    \thispagestyle{empty}%
+    \vspace*{\fill}
+    \begin{center}
+      {\normalfont\Large\scshape Chapter~\thesection\par}
+      \vspace{1.5em}
+      {\normalfont\Huge\bfseries #1\par}
+    \end{center}
+    \vspace*{\fill}
+    \clearpage
+  \fi
+}
+
+\title{\projecttitle}
+\author{\reportauthor}
+\hypersetup{
+  pdftitle={\reporttitle: \projecttitle},
+  pdfauthor={\reportauthor}
+}
+
+\fancypagestyle{vivareport}{%
+  \fancyhf{}
+  \fancyhead[L]{\headerfont \reporttitle}
+  \fancyhead[R]{\headerfont \reportauthor}
+  \fancyfoot[L]{\ifthenelse{\boolean{confidential}}{\footerfont \internalonly}{}}
+  \fancyfoot[R]{\footerfont Page \thepage}
+}
+
+\begin{document}
+
+% =================================================
+% Title page
+% =================================================
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+  \vspace*{0.08\textheight}
+
+  {\normalfont\Large\bfseries \reporttitle\par}
+  \vspace{2.2em}
+  {\normalfont\fontsize{27}{33}\selectfont\bfseries
+    \projecttitle\par}
+
+  \vfill
+
+  {\normalfont\Large\bfseries \reportauthor\par}
+  \vspace{0.6em}
+  {\normalfont\large Student number: \studentnumber\par}
+
+  \vspace{2.5em}
+
+  \begin{tabular}{@{}>{\bfseries\raggedleft\arraybackslash}p{0.23\textwidth}@{\hspace{0.75em}}p{0.52\textwidth}@{}}
+    Programme:   & \degreeprogramme \\[0.6em]
+    Department:  & \department \\[0.6em]
+    Institution: & \institution \\[0.6em]
+    Supervisors: & \supervisors \\[0.6em]
+    Report date: & \reportdate
+  \end{tabular}
+
+  \vfill
+
+  {\normalfont
+    Submitted in support of the [review name] in the [department or programme].\par}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\pagestyle{vivareport}
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+% =================================================
+% Abstract
+% =================================================
+\section*{Abstract}
+\phantomsection
+\addcontentsline{toc}{section}{Abstract}
+\reportprompt{Summarise the research problem, its importance, the central aim and questions, the approach, progress and evidence to date, expected contribution, and next steps. Keep the summary proportionate to the report and follow any locally agreed length guidance.}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+% Add a List of Figures if the report contains figures.
+% \phantomsection
+% \addcontentsline{toc}{section}{List of Figures}
+% \listoffigures
+% \clearpage
+
+\phantomsection
+\addcontentsline{toc}{section}{List of Tables}
+\listoftables
+\clearpage
+
+% =================================================
+% Main report
+% =================================================
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\reportchapter{Introduction and Research Context}{sec:introduction}
+
+\subsection{Background and motivation}
+\reportprompt{Introduce the research area and explain why the problem matters. Define the wider scientific, technical, or societal context without assuming specialist knowledge. Support claims with relevant sources.}
+
+\subsection{Research problem}
+\reportprompt{State the specific problem or knowledge gap. Explain what is not yet understood or achieved, why existing approaches are insufficient, and what makes the problem suitable for doctoral research.}
+
+\subsection{Aim, objectives, and research questions}
+\reportprompt{Give one overarching aim, a manageable set of objectives, and explicit research questions. Include testable hypotheses where appropriate, and show how each question maps to planned work.}
+
+\subsection{Originality and expected contribution}
+\reportprompt{Describe the anticipated original contributions and who may benefit. Distinguish established results from expected outcomes, and avoid claiming novelty before comparing the work critically with prior research.}
+
+\subsection{Scope and definitions}
+\reportprompt{Define important terms, assumptions, boundaries, and exclusions. Explain what the project will not attempt and why.}
+
+\subsection{Report structure}
+\reportprompt{Briefly explain how the remaining chapters build the argument from research context and prior work through methods, progress, and the proposed programme.}
+
+\reportchapter{Literature Review and Research Gap}{sec:literature}
+
+\subsection{Review approach}
+\reportprompt{Explain how literature was identified, selected, and organised. For a systematic or scoping review, report the relevant search and screening method; otherwise state the scope and limitations of the review.}
+
+\subsection{Theme one: [replace with a topic]}
+\reportprompt{Critically compare the most relevant theories, methods, and findings. Identify agreements, disagreements, assumptions, and limitations rather than listing papers one by one.}
+
+\subsection{Theme two: [replace with a topic]}
+\reportprompt{Organise this section around a second theme needed to understand the project. Explain how it relates to the first theme and to your research questions. Add or remove thematic sections to suit the project.}
+
+\subsection{Synthesis and research gap}
+\reportprompt{Synthesize what the literature establishes, where evidence is weak or missing, and how the proposed research addresses a specific gap. Make the link to the project questions explicit.}
+
+\subsection{Conceptual or theoretical framework}
+\reportprompt{Present the framework, model, or set of concepts that guides the research, if applicable. Define its constructs and explain how it informs the design, analysis, or interpretation.}
+
+% Figure files are stored in the project-relative folder `figs/`.
+
+\reportchapter{Research Design and Methods}{sec:methods}
+
+\subsection{Overall research design}
+\reportprompt{Show how the research questions, work packages, methods, and evaluation criteria fit together. Justify the overall design and identify dependencies between studies.}
+
+\subsection{Data, materials, or study setting}
+\reportprompt{Describe the data sources, participants, systems, documents, or materials required. State what is already available, what must be collected or built, and any access constraints.}
+
+\subsection{Methods and analysis}
+\reportprompt{Describe the planned methods at a level that enables assessment of their suitability. Explain how data will be analysed and how the results will answer each research question. Move extensive technical detail to an appendix if useful.}
+
+\subsection{Evaluation and success criteria}
+\reportprompt{Define baselines, comparison conditions, outcome measures, validation procedures, and criteria for interpreting positive, negative, or inconclusive results.}
+
+\subsection{Ethics, safety, and data management}
+\reportprompt{Summarise relevant ethical review, consent, privacy, safety, data protection, and research-integrity considerations. State approval status accurately and describe how data and code will be stored, documented, and shared where permitted.}
+
+\subsection{Reproducibility and limitations}
+\reportprompt{Describe planned steps for reproducibility, such as preregistration, version control, archived materials, or transparent analysis. Identify methodological limitations and how they will be managed.}
+
+\reportchapter{Progress to Date}{sec:progress}
+
+\subsection{Overview of progress}
+\reportprompt{Summarise work completed since registration and distinguish completed, ongoing, and planned activities. Relate progress to the original objectives and explain any changes in scope or direction.}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Summary of progress against research objectives.}
+  \label{tab:progress}
+  \begin{tabularx}{\textwidth}{@{}p{0.28\textwidth}RR@{}}
+    \toprule
+    Objective or work package & Progress and evidence & Status or next step \\
+    \midrule
+    \textit{[Objective 1]} & \textit{[Work completed, outputs, or findings]} & \textit{[Complete / ongoing / planned]} \\
+    \textit{[Objective 2]} & \textit{[Work completed, outputs, or findings]} & \textit{[Complete / ongoing / planned]} \\
+    \textit{[Objective 3]} & \textit{[Work completed, outputs, or findings]} & \textit{[Complete / ongoing / planned]} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Completed work and preliminary findings}
+\reportprompt{For each completed study or work package, state its question, approach, main evidence, limitations, and implications for the next stage. Include figures or tables only where they clarify the argument.}
+
+\subsection{Outputs and research development}
+\reportprompt{List relevant manuscripts, software, datasets, presentations, training, collaborations, or other outputs. Mark publication and review status precisely, and identify your contribution to collaborative work.}
+
+\subsection{Reflection and changes to the project}
+\reportprompt{Explain what has been learned about feasibility, assumptions, or methods. Record significant changes from the original plan, why they were made, and how they affect the research questions and timeline.}
+
+\reportchapter{Research Plan}{sec:research-plan}
+
+\subsection{Remaining work packages}
+\reportprompt{Describe the remaining work in a logical order. For each work package, specify its question, method, dependencies, deliverable, and how it contributes to the thesis.}
+
+\subsection{Milestones and timeline}
+\reportprompt{Give dated, deliverable-led milestones through completion. Use realistic durations and include analysis, writing, review, and contingency time. Agree the final schedule with your supervisory team.}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Proposed research milestones.}
+  \label{tab:milestones}
+  \begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}R p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.19\textwidth}@{}}
+    \toprule
+    Work package & Deliverable or decision point & Target date & Dependencies or notes \\
+    \midrule
+    \textit{[Work package 1]} & \textit{[Measurable output]} & \textit{[Month YYYY]} & \textit{[Dependencies]} \\
+    \textit{[Work package 2]} & \textit{[Measurable output]} & \textit{[Month YYYY]} & \textit{[Dependencies]} \\
+    \textit{[Work package 3]} & \textit{[Measurable output]} & \textit{[Month YYYY]} & \textit{[Dependencies]} \\
+    \textit{[Writing and submission]} & \textit{[Draft and submission milestones]} & \textit{[Month YYYY]} & \textit{[Review time]} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Risks and contingency plans}
+\reportprompt{Identify the main scientific, technical, access, ethical, and scheduling risks. For each, state likelihood and impact, an early warning or decision point, mitigation, and a credible fallback that preserves a coherent thesis.}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Research risk register.}
+  \label{tab:risks}
+  \begin{tabularx}{\textwidth}{@{}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.15\textwidth}RR@{}}
+    \toprule
+    Risk & \shortstack[l]{Likelihood /\\ impact} & Mitigation & Contingency \\
+    \midrule
+    \textit{[Risk]} & \textit{[L] / [H]} & \textit{[Preventive action and trigger]} & \textit{[Fallback plan]} \\
+    \textit{[Risk]} & \textit{[L] / [H]} & \textit{[Preventive action and trigger]} & \textit{[Fallback plan]} \\
+    \textit{[Risk]} & \textit{[L] / [H]} & \textit{[Preventive action and trigger]} & \textit{[Fallback plan]} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Proposed thesis structure}
+\reportprompt{Give a provisional chapter outline. For each chapter, state its purpose and the evidence or contribution it is expected to contain. Indicate which chapters depend on work still to be completed.}
+
+\begin{enumerate}[leftmargin=*]
+  \item Introduction and research context
+  \item Literature review and research gap
+  \item \textit{[Research study or methods chapter]}
+  \item \textit{[Research study or methods chapter]}
+  \item \textit{[Synthesis, discussion, and conclusions]}
+\end{enumerate}
+
+\reportchapter{Discussion and Feasibility}{sec:discussion}
+
+\subsection{How the work answers the research questions}
+\reportprompt{Bring together the literature, methods, progress, and planned studies. Explain how the combined programme can answer the questions and support the expected contribution.}
+
+\subsection{Feasibility, resources, and support}
+\reportprompt{Assess whether the remaining programme is achievable within the available time. Identify essential facilities, data access, collaborators, training, supervision, and other resources, including any unresolved dependencies.}
+
+\subsection{Limitations and alternative interpretations}
+\reportprompt{Discuss the main threats to validity and plausible alternative explanations. Explain what conclusions would and would not be justified by the anticipated evidence.}
+
+\reportchapter{Conclusions}{sec:conclusion}
+\reportprompt{Restate the research problem and aim, summarise the strongest progress to date, and explain the next steps and anticipated contribution. Do not introduce new evidence or claims.}
+
+% =================================================
+% References
+% =================================================
+\clearpage
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\bibliography{refs}
+
+% =================================================
+% Optional appendices: remove those that are not useful.
+% =================================================
+\appendix
+\reportappendixtrue
+
+\reportchapter{Detailed Project Schedule}{app:schedule}
+\reportprompt{Use this appendix for a more detailed schedule if the summary in Chapter~\ref{sec:research-plan} is not sufficient. Replace the example rows and dates.}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Detailed project schedule.}
+  \label{tab:detailed-schedule}
+  \begin{tabularx}{\textwidth}{@{}p{0.23\textwidth}p{0.19\textwidth}RR@{}}
+    \toprule
+    Activity & Period & Deliverable & Status or dependency \\
+    \midrule
+    \textit{[Activity or work package]} & \textit{[Start--end date]} & \textit{[Output]} & \textit{[Status / dependency]} \\
+    \textit{[Activity or work package]} & \textit{[Start--end date]} & \textit{[Output]} & \textit{[Status / dependency]} \\
+    \textit{[Activity or work package]} & \textit{[Start--end date]} & \textit{[Output]} & \textit{[Status / dependency]} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\reportchapter{Supplementary Material}{app:supplementary}
+\reportprompt{Use this appendix only for material that supports assessment of the report but interrupts its main argument, such as extended methods, supplementary analyses, instruments, or a publication list. Include only material you are permitted to share.}
+
+% Example for appending a PDF. Replace the relative path and page range as needed.
+% \includepdf[pages=-]{appendices/supplementary-material.pdf}
+
+\end{document}
